@@ -1,5 +1,5 @@
 Arguments: 
-  /home/vagrant/.nvm/versions/node/v10.14.2/bin/node /home/vagrant/.yarn/bin/yarn.js add express-paginate
+  /home/vagrant/.nvm/versions/node/v10.14.2/bin/node /home/vagrant/.yarn/bin/yarn.js install
 
 PATH: 
   /home/vagrant/.yarn/bin:/home/vagrant/.config/yarn/global/node_modules/.bin:/home/vagrant/.nvm/versions/node/v10.14.2/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
@@ -46,6 +46,9 @@ npm manifest:
       "babel-loader": "8.0.4",
       "webpack": "4.26.1",
       "webpack-cli": "3.1.2"
+    },
+    "engines": {
+      "node": "~10"
     }
   }
 
