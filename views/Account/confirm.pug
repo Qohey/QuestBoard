@@ -1,0 +1,26 @@
+extends ../layout
+
+block content
+  form.form-inline.form-horizontal(method="post" action="/AccountHome")
+    each val, key in Data
+      input(type="hidden" name=key value=val)
+    div.container
+      div.card.my-3
+        div.card-header
+          span.font-weight-bold 登録情報
+        div.card-body
+          div.form-group.row.my-3
+            label.col-sm-2.col-form-label ユーザ名：
+            div.col-sm-10.text-left #{Data['userName']}
+          div.form-group.row.my-3
+            label.col-sm-2.col-form-label メールアドレス：
+            div.col-sm-10.text-left #{Data['mail']}
+          div.form-group.row.my-3
+            label.col-sm-2.col-form-label パスワード：
+            div.col-sm-10.text-left #{DiPass}
+        div.card-footer
+          div.row
+            div.button-group.mr-2
+              button.btn.btn-outline-danger(type="submit" name="mode" value="back") 基本情報入力へ戻る
+            div.button-group.ml-auto
+              button.btn.btn-primary(type="submit" name="mode" value="regist") 変更する

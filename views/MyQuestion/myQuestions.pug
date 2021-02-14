@@ -1,0 +1,42 @@
+extends ../layout
+
+block content
+  script(type="text/javascript").
+    function edit(QuestionID) {
+      var questionID = document.getElementById('questionID');
+      questionID.value = QuestionID;
+      document.form.submit();
+    }
+    function del(QuestionID) {
+      if(confirm("この質問を削除しますか?")) {
+        var questionID = document.getElementById('questionID');
+        questionID.value = QuestionID;
+        document.form.submit();
+      }
+    }
+  div.container
+    form(method="post" action="/MyQuestion" id="form" name="form")
+      input(type="hidden" name="questionID" id="questionID")
+      if Questions.length > 0
+        each question in Questions
+          div.card.my-3
+            div.card-header
+              div.row
+                div.col-sm-9.text-left
+                  if (question['isDisplay'])
+                    span.badge.badge-success 表示中
+                  else
+                    span.badge.badge-danger 非表示
+                div.col-sm-3.text-right
+                  span 質問時刻:#{question['createdAt'].toLocaleDateString()} #{question['createdAt'].toLocaleTimeString()}
+              span.h3.text-left #{question['questionTitle']}
+            div.card-body
+              span.h6 !{question['questionContent'].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/`/g, '&#x60;').replace(/\r?\n/g,'<br />')}
+            div.card-footer
+              div.row
+                div.button-group.mr-2
+                  button.btn.btn-outline-danger(type="submit" name="mode" value="del" onclick=`del(${question['questionID']});`) 削除する
+                div.button-group.ml-auto
+                  button.btn.btn-info(type="submit" name="mode" value="edit" onclick=`edit(${question['questionID']})`) 編集する
+      else
+        h1.my-3 質問はありません

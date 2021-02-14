@@ -1,0 +1,127 @@
+extends ../layout
+
+block content 
+  script(type="text/javascript").
+    function answer() {
+      if(document.getElementById("answerContent").value.length != 0) {
+        if(confirm("この内容で回答を送信しますか?")){
+          var mode = document.getElementById('mode');
+          mode.value = "answer";
+          document.form.submit();
+        }
+      } else {
+        alert("回答内容が未入力です。");
+      }
+    }
+    function deleteAnswer(AnswerID) {
+      if(confirm("この回答を削除しても良いですか?")) {
+        var mode = document.getElementById('mode');
+        var form = document.getElementById('form');
+        var answerID = document.createElement('input');
+        answerID.type = "hidden";
+        answerID.name = "answerID";
+        answerID.value = AnswerID;
+        form.appendChild(answerID);
+        mode.value = "deleteAnswer";
+        form.submit();
+      }
+    }
+    function bestAnswer(AnswerID) {
+      if(confirm("ベストアンサーに選んでも良いですか?")) {
+        var mode = document.getElementById('mode');
+        var form = document.getElementById('form');
+        var answerID = document.createElement('input');
+        answerID.type = "hidden";
+        answerID.name = "answerID";
+        answerID.value = AnswerID;
+        form.appendChild(answerID);
+        mode.value = "bestAnswer";
+        form.submit();
+      }
+    }
+    function deleteReply(ReplyID) {
+      if(confirm("この返信を削除しても良いですか?")) {
+        var mode = document.getElementById("mode");
+        var form = document.getElementById('form');
+        var replyID = document.createElement('input');
+        replyID.type = "hidden";
+        replyID.name = "replyID";
+        replyID.value = ReplyID;
+        form.appendChild(replyID);
+        mode.value = "deleteReply";
+        form.submit();
+      }
+    }
+    function reply(AnswerID) {
+      if(document.getElementById('replyContent'+AnswerID).value.length != 0) {
+        if(confirm("この内容で返信しますか?")) {
+          var mode = document.getElementById("mode");
+          var form = document.getElementById('form');
+          var answerID = document.createElement('input');
+          var replyContent = document.getElementById('replyContent'+AnswerID);
+          answerID.type = "hidden";
+          answerID.name = "answerID";
+          answerID.value = AnswerID;
+          form.appendChild(answerID);
+          mode.value = "reply";
+          replyContent.name = "replyContent";
+          form.submit();
+        }
+      } else {
+        alert("返信内容が未入力です。");
+      }
+    }
+  div.container
+    form(id="form" name="form" method="post" action="/QuestionBoard")
+      input(type="hidden" name="questionID" value=Question['questionID'])
+      input(type="hidden" id="mode" name="mode")
+      div.card.my-3
+        div.card-header
+          span.h4.text-left #{Question['questionTitle']}
+        div.card-body
+          span.h6.card-text !{Question['questionContent'].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/`/g, '&#x60;').replace(/\r?\n/g,'<br />')}
+          if (!ReadOnly && UserData.userID != Question['userID'])
+            div.form-group.my-3
+              textarea.form-control.col-sm-12(id="answerContent" name="answerContent" placeholder="回答内容" autocomplete="off")
+            div.text-right
+              button.btn.btn-primary(type="button" onclick="answer();") 回答する
+      each answer in Answers
+        div.card.my-2
+          div.card-header
+            div.row
+              each user in Users
+                if (UserData)
+                  if (answer['userID'] == user['userID'])
+                    if (answer['userID'] == UserData.userID)
+                      span.col-sm-10.h4 [#{user['userName']}さんの回答]
+                      if (!ReadOnly)
+                        div.col-sm-2.text-right
+                          button.btn.btn-outline-danger(type="button" onclick=`deleteAnswer(${answer['answerID']});`) 回答を削除
+                    else if (Question['userID'] == UserData.userID)
+                      span.col-sm-9.h4 [#{user['userName']}さんの回答]
+                      if (!ReadOnly)
+                        div.col-sm-3.text-right
+                          button.btn.btn-primary(type="button" onclick=`bestAnswer(${answer['answerID']});`) ベストアンサーに選択
+                else if (answer['userID'] == user['userID'])
+                  span.col-sm-10.h4 [#{user['userName']}さんの回答]
+                  div.col-sm-11
+                    span.h6 !{answer['answerContent'].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/`/g, '&#x60;').replace(/\r?\n/g,'<br />')}
+          div.card-body
+            each reply in Replies
+              if (reply['answerID'] == answer['answerID'])
+                div.row
+                  each user in Users
+                    if (reply['userID'] == user['userID'])
+                      span.h6.col-sm-10 [#{user['userName']}さんの返信]
+                  div.col-sm-10
+                    span.h6 !{reply['replyContent'].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/`/g, '&#x60;').replace(/\r?\n/g,'<br />')}
+                  if (UserData && reply['userID'] == UserData.userID && !ReadOnly)
+                    div.col-sm-2.text-right
+                      button.btn.btn-outline-danger(type="button" onclick=`deleteReply(${reply['replyID']});`) 返信を削除
+                hr
+            if !ReadOnly
+              div.row.my-3
+                div.col-sm-10
+                  textarea.form-control(id=`replyContent${answer['answerID']}` placeholder="返信内容")
+                div.text-right.col-sm-2
+                  button.btn.btn-info(type="button" onclick=`reply(${answer['answerID']});`) 返信する

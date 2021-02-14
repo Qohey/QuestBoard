@@ -1,0 +1,54 @@
+extends ../layout
+
+block content
+  script(type="text/javascript").
+    function back() {
+      var mode = document.getElementById("mode");
+      mode.value="MyQuestion";
+      document.form.submit();
+    }
+  form.form-inline.form-horizontal(method="post" action="/MyQuestion" id="form" name="form")
+    input(type="hidden" id="mode" name="mode" value="confirm")
+    input(type="hidden" name="questionID" value=Question['questionID'])
+    div.container
+      div.card.my-3
+        div.card-header
+          span.font-weight-bold 質問情報
+        div.card-body
+          if(errors)
+            each error in errors
+              span.text-danger.col-sm-3 ※#{error}
+              br
+          div.form-group.row.my-3
+            label.col-sm-3.col-form-label タイトル
+              span.badge.badge-danger 必須
+            div.col-sm-9
+              input.form-control(type="text" name="questionTitle" value=Question['questionTitle'] maxlength="255" autocomplete="off" required)
+          div.form-group.row.my-3
+            label.col-sm-3.col-form-label 質問内容
+              span.badge.badge-danger 必須
+            div.col-sm-9
+              textarea.form-control(name="questionContent" cols=50 rows=5 required) #{Question['questionContent']}
+          div.form-group.row.my-3
+            label.col-sm-3.col-form-label 表示設定
+              span.badge.badge-danger 必須
+            if (Question['isDisplay'] == "true" || Question['isDisplay'])
+              div.form-check.form-check-inline
+                input.form-check-input(id="show" type="radio" name="isDisplay" value="true" checked="checked")
+                label.form-check-label(for="show") 表示
+              div.form-check.form-check-inline
+                input.form-check-input(id="hide" type="radio" name="isDisplay" value="false")
+                label.form-check-label(for="hide") 非表示
+            else
+              div.form-check.form-check-inline
+                input.form-check-input(id="show" type="radio" name="isDisplay" value="true" )
+                label.form-check-label(for="show") 表示
+              div.form-check.form-check-inline
+                input.form-check-input(id="hide" type="radio" name="isDisplay" value="false" checked="checked")
+                label.form-check-label(for="hide") 非表示
+        div.card-footer
+          div.row
+            div.button-group.mr-2
+              button.btn.btn-info(type="button" onclick="back();") 自分の質問一覧へ戻る
+            div.button-group.ml-auto
+              button.btn.btn-primary(type="submit") 質問内容の確認

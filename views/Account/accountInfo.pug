@@ -1,0 +1,59 @@
+extends ../layout
+
+block content 
+  script(type="text/javascript").
+    function Submit(fork){
+      var mode = document.getElementById('mode');
+      var form = document.getElementById('form');
+      switch(fork) {
+        case "home":
+          mode.name = "mode";
+          mode.value = fork;
+          form.submit();
+          break;
+        case 'deletePage':
+            mode.value = fork;
+            mode.name = "mode";
+            form.submit();
+          break;
+      }
+    }
+  form.form-inline.form-horizontal(method="post" action="/AccountHome" name="form" id="form")
+    input(type="hidden" id="mode")
+    div.container
+      div.card.my-3
+        div.card-header
+          span.font-weight-bold アカウント情報
+        div.card-body
+          if(errors)
+            each error in errors
+              span.text-danger.col-sm-3 ※#{error}
+              br
+          div.form-group.row.my-3
+            label.col-sm-3.col-form-label ユーザ名
+              span.badge.badge-danger 必須
+            div.col-sm-9
+              input.form-control(type="text" name="userName" value=Data['userName'] maxlength="32" required autocomplete="off")
+          div.form-group.row.my-3
+            label.col-sm-3.col-form-label メールアドレス
+              span.badge.badge-danger 必須
+            div.col-sm-9
+              input.form-control(type="email" name="mail" value=Data['mail'] required autocomplete="off")
+          div.form-group.row.my-3
+            label.col-sm-3.col-form-label 古いパスワード
+              span.badge.badge-danger 必須
+            div.col-sm-9
+              input.form-control(type="password" name="oldPassword" required)
+          div.form-group.row.my-3
+            label.col-sm-3.col-form-label 新しいパスワード
+              span.badge.badge-danger 必須
+            div.col-sm-9
+              input.form-control(type="password" name="newPassword" data-toggle="tooltip" data-placement="top" title="変更しない場合は古いパスワードを入力" required)
+          div.text-center
+            button.btn.btn-danger(type="button" id="accountDelete" onclick="Submit('deletePage');") アカウントを削除する
+        div.card-footer
+          div.row
+            div.button-group.mr-2
+              button.btn.btn-outline-danger(type="button" id="home" onclick="Submit('home');") ホームへ戻る
+            div.button-group.ml-auto
+              button.btn.btn-primary(type="submit" id="confirm" name="mode" value="confirm") 入力内容の確認

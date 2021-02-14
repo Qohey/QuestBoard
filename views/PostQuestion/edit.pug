@@ -1,0 +1,29 @@
+extends ../layout
+
+block content
+  form.form-inline.form-horizontal(method="post" action="/PostQuestion")
+    div.container
+      div.card.my-3
+        div.card-header
+          span.font-weight-bold 質問情報
+        div.card-body
+          if(errors)
+            each error in errors
+              span.text-danger.col-sm-3 ※#{error}
+              br
+          div.form-group.row.my-3
+            label.col-sm-3.col-form-label タイトル
+              span.badge.badge-danger 必須
+            div.col-sm-9
+              input.form-control(type="text" name="questionTitle" value=Data['questionTitle'] maxlength="255" autocomplete="off")
+          div.form-group.row.my-3
+            label.col-sm-3.col-form-label 質問内容
+              span.badge.badge-danger 必須
+            div.col-sm-9
+              textarea.form-control(name="questionContent" cols=50 rows=5) #{Data['questionContent']}
+        div.card-footer
+          div.row
+            div.button-group.mr-2
+              button.btn.btn-outline-danger(type="submit" name="mode" value="home") ホームへ戻る
+            div.button-group.ml-auto
+              button.btn.btn-primary(type="submit" name="mode" value="confirm") 質問内容の確認

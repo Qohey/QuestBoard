@@ -1,0 +1,45 @@
+extends ../layout
+
+block content
+  script(type="text/javascript").
+    function Submit(fork) {
+      var form = document.getElementById("form");
+      var mode = document.getElementById("mode");
+      mode.name = "mode";
+      mode.value = fork;
+      form.submit();
+    }
+  form.form-inline.form-horizontal(method="post" action="/AccountHome" name="form" id="form")
+    input(type="hidden" id="mode")
+    each val, key in UserData
+      input(type="hidden" name=key value=val)
+    div.container
+      div.card.my-3
+        div.card-header
+          span.font-weight-bold 退会する
+        div.card-body
+          if(errors)
+            each error in errors
+              span.text-danger.col-sm-3 ※#{error}
+              br
+          div.form-group.row.my-3
+            label.col-sm-3.col-form-label ユーザ名
+              span.badge.badge-danger 必須
+            div.col-sm-9
+              span #{Data['userName']}
+          div.form-group.row.my-3
+            label.col-sm-3.col-form-label 現在のパスワード
+              span.badge.badge-danger 必須
+            div.col-sm-9
+              input.form-control(type="password" name="password1" required)
+          div.form-group.row.my-3
+            label.col-sm-3.col-form-label パスワード(確認用)
+              span.badge.badge-danger 必須
+            div.col-sm-9
+              input.form-control(type="password" name="password2" required)
+        div.card-footer
+          div.row
+            div.button-group.mr-2
+              button.btn.btn-primary(type="button" id="home" onclick="Submit('accountInfo');") アカウント情報へ戻る
+            div.button-group.ml-auto
+              button.btn.btn-danger(type="submit" id="del" name="mode" value="accountDelete") アカウントを削除する

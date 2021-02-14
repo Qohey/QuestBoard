@@ -1,0 +1,31 @@
+extends ../layout
+
+block content
+  div.container
+    if Questions.length > 0
+      each question in Questions
+        form(method="post" action="/QuestionBoard")
+          input(type="hidden" name="questionID" value=question["questionID"])
+          input(type="hidden" name="mode" value="read")
+          div.card.my-3
+            div.card-header
+              div.row
+                div.col-sm-9.text-left
+                  if (question['answered'] == true)
+                    span.badge.badge-success 回答済み
+                  else
+                    span.badge.badge-info 回答待ち
+                div.col-sm-3.text-right
+                  span 質問時刻:#{question['createdAt'].toLocaleDateString()} #{question['createdAt'].toLocaleTimeString()}
+              span.h3.text-left #{question['questionTitle']}
+            div.card-body
+              span.h6 !{question['questionContent'].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/`/g, '&#x60;').replace(/\r?\n/g,'<br />')}
+            div.card-footer
+              div.row
+                div.button-group.ml-auto
+                  if (UserData && !question['answered'])
+                    button.btn.btn-primary(type="submit" name="readOnly" value="false") 回答する
+                  else
+                    button.btn.btn-secondary(type="submit" name="readOnly" value="true") 閲覧する
+    else
+      h1.my-3 質問はありません
