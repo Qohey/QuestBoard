@@ -30,7 +30,7 @@ function editProc(req, res) {
   data['userName'] = req.body['userName'];
   data['mail'] = req.body['mail'];
   res.render('CreateAccount/edit', {
-    title: "アカウント作成",
+    title: process.env.DATABASE_URL,
     Data: data
   });
   return;
