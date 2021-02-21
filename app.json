@@ -1,0 +1,7 @@
+{
+  "name": "質問屋さん",
+  "description": "質問屋さん",
+  "logo": "",
+  "keywords": ["node"],
+  "image": "heroku/nodejs"
+}
