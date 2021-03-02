@@ -13,13 +13,13 @@ var AnswersTable = require('./models/answers');
 var RepliesTable = require('./models/replies');
 
 //モデルに合わせたテーブル作成
-UsersTable.sync().then(() => {
+UsersTable.sync({ alter: true }).then(() => {
   QuestionsTable.belongsTo(UsersTable, { foreignKey: 'userID' });
-  QuestionsTable.sync().then(() => {
+  QuestionsTable.sync({ alter: true }).then(() => {
     AnswersTable.belongsTo(QuestionsTable, { foreignKey: 'questionID' });
-    AnswersTable.sync().then(() => {
+    AnswersTable.sync({ alter: true }).then(() => {
       RepliesTable.belongsTo(AnswersTable, { foreignKey: 'answerID' });
-      RepliesTable.sync();
+      RepliesTable.sync({ alter: true });
     });
   });
 });
