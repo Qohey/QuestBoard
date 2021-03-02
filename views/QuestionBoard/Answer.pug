@@ -104,8 +104,8 @@ block content
                           button.btn.btn-primary(type="button" onclick=`bestAnswer(${answer['answerID']});`) ベストアンサーに選択
                 else if (answer['userID'] == user['userID'])
                   span.col-sm-10.h4 [#{user['userName']}さんの回答]
-                  div.col-sm-11
-                    span.h6 !{answer['answerContent'].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/`/g, '&#x60;').replace(/\r?\n/g,'<br />')}
+              div.col-sm-11
+                span.h6 !{answer['answerContent'].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/`/g, '&#x60;').replace(/\r?\n/g,'<br />')}
           div.card-body
             each reply in Replies
               if (reply['answerID'] == answer['answerID'])
